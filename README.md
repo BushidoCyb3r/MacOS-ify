@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="IMG_0050.PNG" alt="macos-ify logo" width="480">
+  <img src="macos-ify-logo.png" alt="macos-ify logo" width="480">
 </p>
 
 # MacOS-ify
