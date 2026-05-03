@@ -2,7 +2,7 @@
   <img src="IMG_0050.PNG" alt="macos-ify logo" width="480">
 </p>
 
-# macos-ify
+# MacOS-ify
 
 > A bash script that detects your Linux distribution and makes your desktop look like macOS using the [WhiteSur](https://github.com/vinceliuice/WhiteSur-gtk-theme) theme suite.
 
