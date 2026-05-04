@@ -390,20 +390,23 @@ install_whitesur_gtk() {
         run "git clone --depth=1 https://github.com/vinceliuice/WhiteSur-gtk-theme.git '$repo'"
     fi
 
+    local theme_dest="${HOME}/.local/share/themes"
+    run "mkdir -p '$theme_dest'"
+
     # base GTK install (NOTE: -i is NOT valid here — it's a sub-option of --shell)
-    run "'$repo/install.sh' -t '$ACCENT' -c '$COLOR'"
+    run "'$repo/install.sh' -d '$theme_dest' -t '$ACCENT' -c '$COLOR'"
 
     # GNOME Shell tweaks: apply Activities-icon variant via --shell sub-namespace.
     # Older WhiteSur releases may not have --shell; tolerate failure.
     if [[ -n "$ICON_VARIANT" && "$ICON_VARIANT" != "standard" ]]; then
-        run "'$repo/install.sh' --shell -i '$ICON_VARIANT' || warn 'Activities-icon variant not applied (older WhiteSur?)'"
+        run "'$repo/install.sh' -d '$theme_dest' --shell -i '$ICON_VARIANT' || warn 'Activities-icon variant not applied (older WhiteSur?)'"
     fi
 
     # libadwaita override (the destructive one)
     if [[ "$INSTALL_LIBADWAITA" == true ]]; then
         warn "Applying libadwaita override — this overwrites ~/.config/gtk-4.0"
         if confirm "Proceed with libadwaita override?"; then
-            run "'$repo/install.sh' -l -t '$ACCENT' -c '$COLOR'"
+            run "'$repo/install.sh' -d '$theme_dest' -l -t '$ACCENT' -c '$COLOR'"
         else
             log "Skipped libadwaita override."
         fi
@@ -633,7 +636,7 @@ ${C_YLW}If Dash to Dock isn't visible after login:${C_RST}
                           version may be too new even for that.
 
 ${C_YLW}To uninstall:${C_RST}
-  ~/.cache/macos-ify/WhiteSur-gtk-theme/install.sh -r
+  ~/.cache/macos-ify/WhiteSur-gtk-theme/install.sh -d ~/.local/share/themes -r
   ~/.cache/macos-ify/WhiteSur-icon-theme/install.sh -r
   ~/.cache/macos-ify/WhiteSur-cursors/install.sh -r
   sudo ~/.cache/macos-ify/WhiteSur-gtk-theme/tweaks.sh -g -r   # if GDM was themed
