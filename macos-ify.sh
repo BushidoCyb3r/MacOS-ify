@@ -259,7 +259,7 @@ install_prereqs() {
     hdr "Installing prerequisites"
     local common=(git curl unzip)
     local rhel=(gnome-tweaks gnome-extensions-app sassc glib2-devel
-                gtk-murrine-engine gnome-themes-extra)
+                gtk-murrine-engine)
     local deb=(gnome-tweaks gnome-shell-extension-manager sassc
                libglib2.0-dev-bin gtk2-engines-murrine gnome-themes-extra)
     local arch=(gnome-tweaks sassc glib2 gtk-engine-murrine gnome-themes-extra)
