@@ -241,6 +241,29 @@ install_gnome() {
     ok "GNOME Shell installed. Select 'GNOME' from your login screen's session menu after rebooting."
 }
 
+# ---------- RHEL extra repos (EPEL + CRB/PowerTools) ------------------------
+enable_rhel_repos() {
+    # Fedora ships a full package set; nothing extra needed.
+    [[ "$DISTRO_ID" == "fedora" ]] && return 0
+
+    hdr "Enabling EPEL and CodeReady Builder repositories"
+
+    if ! rpm -q epel-release &>/dev/null; then
+        run "sudo dnf install -y epel-release"
+    else
+        ok "EPEL already installed."
+    fi
+
+    # CRB (v9+) / PowerTools (v8) provides sassc and other devel packages.
+    local major="${VERSION_ID%%.*}"
+    run "sudo dnf install -y dnf-plugins-core"
+    if (( major >= 9 )); then
+        sudo dnf config-manager --set-enabled crb 2>/dev/null || true
+    else
+        sudo dnf config-manager --set-enabled powertools 2>/dev/null || true
+    fi
+}
+
 # ---------- package install (distro abstraction) ----------------------------
 pkg_install() {
     local pkgs=("$@")
@@ -258,14 +281,15 @@ pkg_install() {
 install_prereqs() {
     hdr "Installing prerequisites"
     local common=(git curl unzip)
-    local rhel=(gnome-tweaks gnome-extensions-app sassc glib2-devel
-                gtk-murrine-engine)
+    local rhel=(gnome-tweaks gnome-extensions-app sassc glib2-devel)
     local deb=(gnome-tweaks gnome-shell-extension-manager sassc
                libglib2.0-dev-bin gtk2-engines-murrine gnome-themes-extra)
     local arch=(gnome-tweaks sassc glib2 gtk-engine-murrine gnome-themes-extra)
 
     case "$DISTRO_FAMILY" in
-        rhel)   pkg_install "${common[@]}" "${rhel[@]}" ;;
+        rhel)
+            enable_rhel_repos
+            pkg_install "${common[@]}" "${rhel[@]}" ;;
         debian) pkg_install "${common[@]}" "${deb[@]}" ;;
         arch)   pkg_install "${common[@]}" "${arch[@]}" ;;
     esac
