@@ -42,6 +42,7 @@ EXTENSIONS=(
     "user-themes|19"
     "dash-to-dock|307"
     "blur-my-shell|3193"
+    "desktop-cube|4648"
 )
 
 # ---------- color / logging helpers -----------------------------------------
