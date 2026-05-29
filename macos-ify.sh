@@ -568,8 +568,31 @@ apply_settings() {
 # ---------- wallpaper -------------------------------------------------------
 set_wallpaper() {
     hdr "Setting desktop wallpaper"
-    local url="https://miloszfalinski.com/content/files/2025/06/Orange-Dark.png"
-    local dest="${HOME}/.local/share/backgrounds/Orange-Dark.png"
+
+    local choice url filename
+    echo ""
+    echo "  Choose a wallpaper color:"
+    echo "  1) Orange"
+    echo "  2) Green"
+    echo "  3) Blue"
+    echo "  4) Purple"
+    echo ""
+
+    if [[ "$ASSUME_YES" == true ]]; then
+        choice="1"
+    else
+        read -r -p "  Enter 1-4 [default: 1]: " choice
+        choice="${choice:-1}"
+    fi
+
+    case "$choice" in
+        2) url="https://miloszfalinski.com/content/files/2025/06/Green-Dark.png";  filename="Green-Dark.png"  ;;
+        3) url="https://miloszfalinski.com/content/files/2025/06/Blue-Dark.png";   filename="Blue-Dark.png"   ;;
+        4) url="https://miloszfalinski.com/content/files/2025/06/Purple-Dark.png"; filename="Purple-Dark.png" ;;
+        *) url="https://miloszfalinski.com/content/files/2025/06/Orange-Dark.png"; filename="Orange-Dark.png" ;;
+    esac
+
+    local dest="${HOME}/.local/share/backgrounds/${filename}"
 
     run "mkdir -p '${HOME}/.local/share/backgrounds'"
     run "curl -fsSL '$url' -o '$dest'"
